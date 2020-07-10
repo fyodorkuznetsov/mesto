@@ -1,0 +1,13 @@
+@import url(../vendor/fonts/fonts.css);
+@import url(../vendor/normalize.css);
+@import url(../vendor/fonts/fonts.css);
+@import url(../blocks/page/page.css);
+@import url(../blocks/header/header.css);
+@import url(../blocks/profile/profile.css);
+@import url(../blocks/places/places.css);
+@import url(../blocks/footer/footer.css);
+@import url(../blocks/popup/popup.css);
+/*т.к. импорты необходимо объявлять в начале файла блока - модификатор не сможет переопределить значение св-ва display.
+  В данном случае нашёл один из выходов - подключить модификатор позже чем css блока*/
+@import url(../blocks/popup/_state/popup_state_opened.css);
+@import url(../blocks/input/input.css);

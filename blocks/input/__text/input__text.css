@@ -1,0 +1,13 @@
+.input__text{
+  width: 100%;
+  border: none;
+  outline:none;
+  border-bottom: 1px solid #00000033;
+  font-family: Inter;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000;
+  padding: 8px 0px 9px;
+  margin-bottom: 22px;
+}

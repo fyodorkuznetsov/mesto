@@ -1,0 +1,20 @@
+.popup__close-btn{
+  display: block;
+  position: absolute;
+  color: #fff;
+  font-size: 73px;
+  line-height: 30px;
+  padding: 0;
+  background: transparent;
+  right: -38px;
+  top: -33px;
+  transform: rotate(45deg);
+  border: 0;
+  cursor:pointer;
+  outline:none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.popup__close-btn:hover{
+  opacity:0.6;
+}
