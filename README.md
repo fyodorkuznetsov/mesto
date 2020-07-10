@@ -8,9 +8,9 @@
 
 Макет является адаптивным.
 
-**Figma**
+**GH**
 
-* [Ссылка на проект в GH Pages](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)
+* [Ссылка на проект в GH Pages](https://fyodorkuznetsov.github.io/mesto/)
 
 **Динамические возможности**
 
