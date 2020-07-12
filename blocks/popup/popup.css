@@ -1,9 +1,9 @@
-@import url(../popup/__container/popup__container.css);
-@import url(../popup/__close-btn/popup__close-btn.css);
-@import url(../popup/__title/popup__title.css);
+@import url(./__container/popup__container.css);
+@import url(./__close-btn/popup__close-btn.css);
+@import url(./__title/popup__title.css);
 
 .popup{
-  display:none;
+  display: none;
   justify-content: center;
   align-items: center;
   position: fixed;

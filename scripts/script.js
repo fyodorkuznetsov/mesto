@@ -16,8 +16,8 @@ const profileChangeForm = document.querySelector('.input');
 /**
  * init events
  */
-openPopupBtn.addEventListener('click',openPopup);
-closePopupBtn.addEventListener('click',closePopup);
+openPopupBtn.addEventListener('click',togglePopup);
+closePopupBtn.addEventListener('click',togglePopup);
 
 profileChangeForm.addEventListener('submit',formSubmitHandler);
 
@@ -35,16 +35,10 @@ function fillFormFields(){
   }
 }
 
-function openPopup(){
+function togglePopup(){
   fillFormFields();
   if(typeof popup !== 'undefined'){
-    popup.classList.add('popup_state_opened')
-  }
-}
-
-function closePopup(){
-  if(typeof popup !== 'undefined'){
-    popup.classList.remove('popup_state_opened')
+    popup.classList.toggle('popup_state_opened')
   }
 }
 
@@ -54,6 +48,6 @@ function formSubmitHandler(e){
   let nameValue = profileNameInput.value;
   profileNameWrap.textContent = nameValue
   professionWrap.textContent = professionValue;
-  closePopup();
+  togglePopup();
 }
 

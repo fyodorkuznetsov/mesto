@@ -1,11 +1,12 @@
 @import url(./__logo/header__logo.css);
 
 .header{
+  flex: 0 0 auto;
   padding: 45px 0 35px;
   border-bottom: 1px solid rgba(84, 84, 84, 0.7);
 }
 
-@media screen and (max-width:320px){
+@media screen and (max-width: 320px){
   .header{
     margin: 0 -19px;
     padding: 28px 25px 26px;

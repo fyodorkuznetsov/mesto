@@ -3,7 +3,7 @@
   color: #fff;
   width: 100%;
   border-radius: 2px;
-  font-family: Inter;
+  font-family: Inter, Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
@@ -11,10 +11,10 @@
   border: none;
   padding: 14px 0 13px;
   margin-top: 27px;
-  cursor:pointer;
+  cursor: pointer;
   transition: opacity 0.3s ease-in-out;
 }
 
 .input__btn:hover{
-  opacity:0.8;
+  opacity: 0.8;
 }

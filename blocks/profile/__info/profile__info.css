@@ -1,9 +1,9 @@
 .profile__info{
-  color:#fff;
-  flex-grow:1;
+  color: #fff;
+  flex-grow: 1;
 }
 
-@media screen and (max-width:700px){
+@media screen and (max-width: 700px){
   .profile__info{
     display: flex;
     flex-direction: column;

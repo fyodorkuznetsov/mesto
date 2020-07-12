@@ -9,9 +9,9 @@
 }
 
 .places__like:hover{
-  opacity:0.6;
+  opacity: 0.6;
 }
 
 .places__like:focus{
-  outline:none;
+  outline: none;
 }
