@@ -7,6 +7,8 @@
 @import url(../blocks/header/header.css);
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/places/places.css);
+/*по аналогии с модификатором для попапа - подключаем модификатор активного состояния попапа позже подключения основной css*/
+@import url(../blocks/places/__like/_state/places__like_state_active.css);
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/popup/popup.css);
 /*т.к. импорты необходимо объявлять в начале файла блока - модификатор не сможет переопределить значение св-ва display.

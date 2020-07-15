@@ -1,4 +1,5 @@
 .places__place{
+  position: relative;
   border-radius: 10px;
   background: #fff;
   overflow: hidden;

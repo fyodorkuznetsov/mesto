@@ -10,3 +10,12 @@
   padding: 8px 0px 9px;
   margin-bottom: 22px;
 }
+
+@media screen and (max-width: 550px){
+  .input__text{
+    font-size: 12px;
+    line-height: 15px;
+    margin-bottom: 11px;
+  }
+}
+

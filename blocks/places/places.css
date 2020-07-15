@@ -1,8 +1,10 @@
 @import url(./__place/places__place.css);
 @import url(./__picture/places__picture.css);
 @import url(./__title-wrap/places__title-wrap.css);
+@import url(./__picture-wrap/places__picture-wrap.css);
 @import url(./__title/places__title.css);
 @import url(./__like/places__like.css);
+@import url(./__remove/places__remove.css);
 
 .places{
   display: grid;
