@@ -3,10 +3,12 @@
  */
 const openPopupBtn = document.querySelector('.profile__edit-button');
 /*we got several popups with same event on close btn*/
-const closePopupBtn = document.querySelectorAll('.popup__close-btn');
+const closePopupBtns = document.querySelectorAll('.popup__close-btn');
 const openPlacePopupBtn = document.querySelector('.profile__add-button');
 
 const picturePopup = document.querySelector('.popup_type_picture');
+const placePopup = document.querySelector('.popup_type_place');
+const profilePopup = document.querySelector('.popup_type_profile');
 
 const profileNameWrap = document.querySelector('.profile__name');
 const professionWrap = document.querySelector('.profile__profession');
@@ -22,32 +24,10 @@ const placeAddForm = document.querySelector('.input_type_place');
 
 const placesContainer = document.querySelector('.places');
 
-const initialCards = [
-  {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+const popupPictureElem = document.querySelector('.popup__picture');
+const popupPictureDescr = document.querySelector('.popup__picture-title');
+
+const placeTemplate = document.querySelector('#place-template').content;
 
 /**
  * declare functions
@@ -63,65 +43,9 @@ function fillFormFields(){
   }
 }
 
-/*open/close popup callback*/
-function togglePopup(evt){
-  if(typeof evt === 'undefined'){
-    /* direct call of a function */
-    const openedPopup = document.querySelector('.popup_state_opened');
-    openedPopup.classList.remove('popup_state_opened');
-  }else{
-    /* choose html items in case of elem clicked */
-    const domElem = evt.target;
-    if(domElem.classList.contains('popup__close-btn')){
-      /*close btn click => close popup*/
-      const popup = domElem.closest('.popup');
-      if(typeof popup !== 'undefined'){
-        popup.classList.toggle('popup_state_opened')
-      }
-    }else{
-      /**open popup action from all open popup btns
-       * get popup class from btn data-attribute
-      */
-      const popupClass = domElem.dataset.popup;
-      if(popupClass.length > 0){
-        const popup = document.querySelector('.' + popupClass);
-        if(popupClass == 'popup_type_profile'){
-          /*if it's a profile change popup we'll need to fill form with profile data*/
-          fillFormFields();
-        }
-        if(typeof popup !== 'undefined'){
-          popup.classList.toggle('popup_state_opened')
-        }
-      }
-    }
-  }
-}
-
-/*profile form submit callback*/
-function profileFormSubmitHandler(e){
-  e.preventDefault();
-  const professionValue = professionInput.value;
-  const nameValue = profileNameInput.value;
-  profileNameWrap.textContent = nameValue
-  professionWrap.textContent = professionValue;
-  togglePopup();
-}
-
-/*add place form submit callback*/
-function placeFormSubmitHandler(e){
-  e.preventDefault();
-  const placeTitleValue = placeTitleInput.value;
-  const placeImgValue = placeImgInput.value;
-  addPlace(placeTitleValue, placeImgValue);
-  togglePopup();
-  /* clear form inputs */
-  placeTitleInput.value = '';
-  placeImgInput.value = '';
-}
-
 /*remove place callback*/
 function removePlace(evt){
-  evt.preventDefault;
+  evt.preventDefault();
   const removeIcon = evt.target;
   const place = removeIcon.closest('.places__place');
   place.remove();
@@ -131,41 +55,41 @@ function removePlace(evt){
 function toggleLike(evt){
   evt.preventDefault();
   const likeBtn = evt.target;
-  if(likeBtn.classList.contains('places__like')){
-    likeBtn.classList.toggle('places__like_state_active');
+  likeBtn.classList.toggle('places__like_state_active');
+}
+
+/*open/close popup*/
+function togglePopup(popup){
+  if(typeof popup !== 'undefined'){
+    popup.classList.toggle('popup_state_opened');
   }
 }
 
 function openPicturePopup(evt){
   /*we don't need to prevent default event here*/
-  /* this pop-up doesn't have same logic as other, that's why we make another funciton on open */
   const pictureItem = evt.target;
   const pictureSrc = pictureItem.getAttribute('src');
   const pictureTitle = pictureItem.getAttribute('alt');
   if(pictureSrc.length > 0 && pictureTitle.length > 0){
-    const popupPictureElem = picturePopup.querySelector('.popup__picture');
-    const popupPictureDescr = picturePopup.querySelector('.popup__picture-title');
     popupPictureElem.setAttribute('src', pictureSrc);
     popupPictureElem.setAttribute('alt', pictureTitle);
     popupPictureDescr.textContent = pictureTitle;
-
-    picturePopup.classList.add('popup_state_opened');
+    togglePopup(picturePopup);
   }
 }
 
 /**
- *  add place function
+ *  prepare place html function
  *  works on button click or on page init
  *  */
-function addPlace(titleValue, pictureSrc){
-  const placeTemplate = document.querySelector('#place-template').content;
+function preparePlace(titleValue, pictureSrc){
   const placeElement = placeTemplate.cloneNode(true);
-
   const placeCopyTitle = placeElement.querySelector('.places__title');
   const placeCopyPicture = placeElement.querySelector('.places__picture');
   const placeCopyRemoveIcon = placeElement.querySelector('.places__remove');
   const placeLikeIcon = placeElement.querySelector('.places__like');
 
+  /*set place attributs & content */
   placeCopyTitle.textContent = titleValue;
   placeCopyPicture.setAttribute('src', pictureSrc);
   placeCopyPicture.setAttribute('alt', titleValue);
@@ -175,27 +99,73 @@ function addPlace(titleValue, pictureSrc){
   placeLikeIcon.addEventListener('click', toggleLike);
   placeCopyPicture.addEventListener('click',openPicturePopup);
 
-  placesContainer.append(placeElement);
+  return placeElement;
+}
+
+/*profile form submit callback*/
+function profileFormSubmitHandler(e){
+  e.preventDefault();
+  const professionValue = professionInput.value;
+  const nameValue = profileNameInput.value;
+  profileNameWrap.textContent = nameValue
+  professionWrap.textContent = professionValue;
+  togglePopup(profilePopup);
+}
+
+/*add place form submit callback*/
+function placeFormSubmitHandler(e){
+  e.preventDefault();
+  const placeTitleValue = placeTitleInput.value;
+  const placeImgValue = placeImgInput.value;
+  const placeElement = preparePlace(placeTitleValue, placeImgValue);
+  placesContainer.prepend(placeElement);
+  togglePopup(placePopup);
+  /* clear form inputs */
+  placeTitleInput.value = '';
+  placeImgInput.value = '';
+}
+
+/*open popup btn click handler with open by popup class from dataset*/
+function openPopupEventHandler(evt){
+  const domElem = evt.target;
+  const popupClass = domElem.dataset.popup;
+  if(popupClass.length > 0){
+    const popup = document.querySelector('.' + popupClass);
+    if(popupClass === 'popup_type_profile'){
+      /*if it's a profile change popup we'll need to fill form with profile data*/
+      fillFormFields();
+    }
+    togglePopup(popup);
+  }
+}
+
+/*close popup btn click handler */
+function closePopupEventHandler(evt){
+  const popup = evt.target.closest('.popup');
+  togglePopup(popup);
+}
+
+/*render places by array of objects*/
+function renderPlaces(cards){
+  cards.forEach((item) => {
+    const placeItem = preparePlace(item.name, item.link);
+    placesContainer.append(placeItem);
+  });
 }
 
 /*render places*/
-initialCards.forEach((item) => {
-  addPlace(item.name, item.link);
-});
-
+renderPlaces(initialCards);
 
 /**
  * init events
  */
-
 /*open/close pop-ups*/
-openPopupBtn.addEventListener('click', togglePopup);
-openPlacePopupBtn.addEventListener('click', togglePopup);
-closePopupBtn.forEach( btn => {
-  btn.addEventListener('click', togglePopup);
+openPopupBtn.addEventListener('click', openPopupEventHandler);
+openPlacePopupBtn.addEventListener('click', openPopupEventHandler);
+closePopupBtns.forEach( btn => {
+  btn.addEventListener('click', closePopupEventHandler);
 });
 
 /*form submit handlers*/
 profileChangeForm.addEventListener('submit', profileFormSubmitHandler);
 placeAddForm.addEventListener('submit', placeFormSubmitHandler);
-
