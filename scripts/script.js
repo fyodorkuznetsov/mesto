@@ -33,8 +33,8 @@ const placeTemplate = document.querySelector('#place-template').content;
  * declare functions
  */
 function fillFormFields(){
-  let name = profileNameWrap.innerHTML;
-  let profession = professionWrap.innerHTML;
+  const name = profileNameWrap.innerHTML;
+  const profession = professionWrap.innerHTML;
   if(name.length > 0){
     profileNameInput.value = name;
   }
@@ -60,9 +60,7 @@ function toggleLike(evt){
 
 /*open/close popup*/
 function togglePopup(popup){
-  if(typeof popup !== 'undefined'){
-    popup.classList.toggle('popup_state_opened');
-  }
+  popup.classList.toggle('popup_state_opened');
 }
 
 function openPicturePopup(evt){
@@ -126,17 +124,13 @@ function placeFormSubmitHandler(e){
 }
 
 /*open popup btn click handler with open by popup class from dataset*/
-function openPopupEventHandler(evt){
-  const domElem = evt.target;
-  const popupClass = domElem.dataset.popup;
-  if(popupClass.length > 0){
-    const popup = document.querySelector('.' + popupClass);
-    if(popupClass === 'popup_type_profile'){
-      /*if it's a profile change popup we'll need to fill form with profile data*/
-      fillFormFields();
-    }
-    togglePopup(popup);
-  }
+function openProfilePopupEventHandler(evt){
+  fillFormFields();
+  togglePopup(profilePopup);
+}
+
+function openPlacePopupEventHandler(evt){
+  togglePopup(placePopup);
 }
 
 /*close popup btn click handler */
@@ -160,8 +154,8 @@ renderPlaces(initialCards);
  * init events
  */
 /*open/close pop-ups*/
-openPopupBtn.addEventListener('click', openPopupEventHandler);
-openPlacePopupBtn.addEventListener('click', openPopupEventHandler);
+openPopupBtn.addEventListener('click', openProfilePopupEventHandler);
+openPlacePopupBtn.addEventListener('click', openPlacePopupEventHandler);
 closePopupBtns.forEach( btn => {
   btn.addEventListener('click', closePopupEventHandler);
 });
