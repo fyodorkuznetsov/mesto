@@ -1,7 +1,7 @@
 /**
  * init vars
  */
-const openPopupBtn = document.querySelector('.profile__edit-button');
+const openProfilePopupBtn = document.querySelector('.profile__edit-button');
 /*we got several popups with same event on close btn*/
 const closePopupBtns = document.querySelectorAll('.popup__close-btn');
 const openPlacePopupBtn = document.querySelector('.profile__add-button');
@@ -154,7 +154,7 @@ renderPlaces(initialCards);
  * init events
  */
 /*open/close pop-ups*/
-openPopupBtn.addEventListener('click', openProfilePopupEventHandler);
+openProfilePopupBtn.addEventListener('click', openProfilePopupEventHandler);
 openPlacePopupBtn.addEventListener('click', openPlacePopupEventHandler);
 closePopupBtns.forEach( btn => {
   btn.addEventListener('click', closePopupEventHandler);
