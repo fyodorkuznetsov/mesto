@@ -30,9 +30,15 @@
     <section class="popup popup_type_profile">
       <div class="popup__container">
         <h3 class="popup__title">Редактировать профиль</h3>
-        <form class="input input_type_profile" action="#" name="profile" enctype="multipart/form-data" method="POST">
-          <input type="text" class="input__text input__text_type_name" placeholder="Имя" name="name">
-          <input type="text" class="input__text input__text_type_profession" placeholder="Профессия" name="profession">
+        <form class="input input_type_profile" action="#" name="profile" enctype="multipart/form-data" method="POST" novalidate>
+          <label class="input__label">
+            <input id="name-input" type="text" class="input__text input__text_type_name" placeholder="Имя" name="name" minlength="2" maxlength="40" required>
+            <span id="name-input-error" class="input__field-error"></span>
+          </label>
+          <label class="input__label">
+            <input id="profession-input" type="text" class="input__text input__text_type_profession" placeholder="Профессия" name="profession" minlength="2" maxlength="200" required>
+            <span id="profession-input-error" class="input__field-error"></span>
+          </label>
           <button type="submit" class="input__btn">Сохранить</button>
         </form>
         <button type="button" class="popup__close-btn"></button>
@@ -41,10 +47,16 @@
     <section class="popup popup_type_place">
       <div class="popup__container">
         <h3 class="popup__title">Новое место</h3>
-        <form class="input input_type_place" action="#" name="place" enctype="multipart/form-data" method="POST">
-          <input type="text" class="input__text input__text_type_place-title" placeholder="Название" name="place-title">
-          <input type="text" class="input__text input__text_type_place-img" placeholder="Ссылка на картинку" name="place-img">
-          <button type="submit" class="input__btn">Создать</button>
+        <form class="input input_type_place" action="#" name="place" enctype="multipart/form-data" method="POST" novalidate>
+          <label class="input__label">
+            <input id="place-input" type="text" class="input__text input__text_type_place-title" placeholder="Название" name="place-title" minlength="1" maxlength="30" required>
+            <span id="place-input-error" class="input__field-error"></span>
+          </label>
+          <label class="input__label">
+            <input id="place-img-input" type="url" class="input__text input__text_type_place-img" placeholder="Ссылка на картинку" name="place-img" required>
+            <span id="place-img-input-error" class="input__field-error"></span>
+          </label>
+          <button type="submit" class="input__btn input__btn_state_disabled" disabled>Создать</button>
         </form>
         <button type="button" class="popup__close-btn"></button>
       </div>
@@ -69,6 +81,7 @@
       </article>
     </template>
     <script src="./scripts/cards.js"></script>
+    <script src="./scripts/validate.js"></script>
     <script src="./scripts/script.js"></script>
   </body>
 </html>

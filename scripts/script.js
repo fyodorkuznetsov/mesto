@@ -5,6 +5,7 @@ const openProfilePopupBtn = document.querySelector('.profile__edit-button');
 /*we got several popups with same event on close btn*/
 const closePopupBtns = document.querySelectorAll('.popup__close-btn');
 const openPlacePopupBtn = document.querySelector('.profile__add-button');
+const popupList = document.querySelectorAll('.popup');
 
 const picturePopup = document.querySelector('.popup_type_picture');
 const placePopup = document.querySelector('.popup_type_place');
@@ -20,7 +21,9 @@ const placeTitleInput = document.querySelector('.input__text_type_place-title');
 const placeImgInput = document.querySelector('.input__text_type_place-img');
 
 const profileChangeForm = document.querySelector('.input_type_profile');
+const profileUpdateBtn = profileChangeForm.querySelector('.input__btn');
 const placeAddForm = document.querySelector('.input_type_place');
+const placeAddBtn = placeAddForm.querySelector('.input__btn');
 
 const placesContainer = document.querySelector('.places');
 
@@ -28,6 +31,15 @@ const popupPictureElem = document.querySelector('.popup__picture');
 const popupPictureDescr = document.querySelector('.popup__picture-title');
 
 const placeTemplate = document.querySelector('#place-template').content;
+
+const validationClasses = {
+  'formSelector': '.input',
+  'inputSelector': '.input__text',
+  'submitButtonSelector': '.input__btn',
+  'inactiveButtonClass': 'input__btn_state_disabled',
+  'inputErrorClass': 'input__text_type_error',
+  'errorClass': 'input__field-error_state_active'
+};
 
 /**
  * declare functions
@@ -37,10 +49,14 @@ function fillFormFields(){
   const profession = professionWrap.innerHTML;
   if(name.length > 0){
     profileNameInput.value = name;
+    hideInputError(profileChangeForm, profileNameInput, validationClasses.inputErrorClass, validationClasses.errorClass);
   }
   if(profession.length > 0){
     professionInput.value = profession;
+    hideInputError(profileChangeForm, professionInput, validationClasses.inputErrorClass, validationClasses.errorClass);
   }
+  profileUpdateBtn.classList.remove(validationClasses.inactiveButtonClass);
+  profileUpdateBtn.removeAttribute('disabled');
 }
 
 /*remove place callback*/
@@ -121,6 +137,9 @@ function placeFormSubmitHandler(e){
   /* clear form inputs */
   placeTitleInput.value = '';
   placeImgInput.value = '';
+  /* return btn to inactive state*/
+  placeAddBtn.classList.add(validationClasses.inactiveButtonClass);
+  placeAddBtn.setAttribute('disabled',true);
 }
 
 /*open popup btn click handler with open by popup class from dataset*/
@@ -139,6 +158,22 @@ function closePopupEventHandler(evt){
   togglePopup(popup);
 }
 
+function closePopupByOverlay(evt){
+  const targetPopup = evt.target;
+  if(evt.target.classList.contains('popup')){
+    togglePopup(targetPopup);
+  }
+}
+
+function closePopupByEsc(evt){
+  if(evt.key === 'Escape'){
+    const openedPopup = document.querySelector('.popup_state_opened');
+    if(openedPopup){
+      togglePopup(openedPopup);
+    }
+  }
+}
+
 /*render places by array of objects*/
 function renderPlaces(cards){
   cards.forEach((item) => {
@@ -149,6 +184,7 @@ function renderPlaces(cards){
 
 /*render places*/
 renderPlaces(initialCards);
+enableValidation(validationClasses);
 
 /**
  * init events
@@ -159,7 +195,13 @@ openPlacePopupBtn.addEventListener('click', openPlacePopupEventHandler);
 closePopupBtns.forEach( btn => {
   btn.addEventListener('click', closePopupEventHandler);
 });
+popupList.forEach( popup => {
+  popup.addEventListener('click', closePopupByOverlay);
+});
+document.addEventListener('keydown',closePopupByEsc);
+
 
 /*form submit handlers*/
 profileChangeForm.addEventListener('submit', profileFormSubmitHandler);
 placeAddForm.addEventListener('submit', placeFormSubmitHandler);
+
