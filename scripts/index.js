@@ -89,6 +89,7 @@ function openPicturePopup(evt){
     popupPictureElem.setAttribute('alt', pictureTitle);
     popupPictureDescr.textContent = pictureTitle;
     togglePopup(picturePopup);
+    document.addEventListener('keydown',closePopupByEsc);
   }
 }
 
@@ -143,25 +144,33 @@ function placeFormSubmitHandler(e){
 }
 
 /*open popup btn click handler with open by popup class from dataset*/
-function openProfilePopupEventHandler(evt){
+function openProfilePopupEventHandler(){
   fillFormFields();
   togglePopup(profilePopup);
+  document.addEventListener('keydown',closePopupByEsc);
 }
 
-function openPlacePopupEventHandler(evt){
+function openPlacePopupEventHandler(){
   togglePopup(placePopup);
+  document.addEventListener('keydown',closePopupByEsc);
 }
 
 /*close popup btn click handler */
 function closePopupEventHandler(evt){
   const popup = evt.target.closest('.popup');
+  const formElem = popup.querySelector('.input');
+  clearForm(formElem, validationClasses);
   togglePopup(popup);
+  document.removeEventListener('keydown',closePopupByEsc);
 }
 
 function closePopupByOverlay(evt){
   const targetPopup = evt.target;
   if(evt.target.classList.contains('popup')){
     togglePopup(targetPopup);
+    const formElem = targetPopup.querySelector('.input');
+    clearForm(formElem, validationClasses);
+    document.removeEventListener('keydown',closePopupByEsc);
   }
 }
 
@@ -170,6 +179,9 @@ function closePopupByEsc(evt){
     const openedPopup = document.querySelector('.popup_state_opened');
     if(openedPopup){
       togglePopup(openedPopup);
+      const formElem = openedPopup.querySelector('.input');
+      clearForm(formElem, validationClasses);
+      document.removeEventListener('keydown',closePopupByEsc);
     }
   }
 }
@@ -198,8 +210,6 @@ closePopupBtns.forEach( btn => {
 popupList.forEach( popup => {
   popup.addEventListener('click', closePopupByOverlay);
 });
-document.addEventListener('keydown',closePopupByEsc);
-
 
 /*form submit handlers*/
 profileChangeForm.addEventListener('submit', profileFormSubmitHandler);

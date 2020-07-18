@@ -56,3 +56,14 @@ function enableValidation(domParams){
     setEventListeners(formElement, domParams);
   });
 }
+
+/* function clears inputs and hides errors on popup close*/
+function clearForm(formElement, domParams){
+  formElement.reset();
+  const buttonElement = formElement.querySelector(domParams.submitButtonSelector);
+  const inputList = Array.from(formElement.querySelectorAll(domParams.inputSelector));
+  inputList.forEach((inputElement) => {
+      hideInputError(formElement, inputElement, domParams.inputErrorClass, domParams.errorClass);
+  });
+  toggleButtonState(inputList, buttonElement, domParams.inactiveButtonClass);
+}
