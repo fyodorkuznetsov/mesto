@@ -1,14 +1,16 @@
-/**
- * init vars
- */
+import {initialCards} from './cards.js';
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
+const popupPictureElem = document.querySelector('.popup__picture');
+const popupPictureDescr = document.querySelector('.popup__picture-title');
+const picturePopup = document.querySelector('.popup_type_picture');
+
 const openProfilePopupBtn = document.querySelector('.profile__edit-button');
-/*we got several popups with same event on close btn*/
 const closePopupBtns = document.querySelectorAll('.popup__close-btn');
 const openPlacePopupBtn = document.querySelector('.profile__add-button');
 const popupList = document.querySelectorAll('.popup');
 
-const picturePopup = document.querySelector('.popup_type_picture');
-const placePopup = document.querySelector('.popup_type_place');
 const profilePopup = document.querySelector('.popup_type_profile');
 
 const profileNameWrap = document.querySelector('.profile__name');
@@ -25,15 +27,11 @@ const profileUpdateBtn = profileChangeForm.querySelector('.input__btn');
 const placeAddForm = document.querySelector('.input_type_place');
 const placeAddBtn = placeAddForm.querySelector('.input__btn');
 
+const placePopup = document.querySelector('.popup_type_place');
+
 const placesContainer = document.querySelector('.places');
 
-const popupPictureElem = document.querySelector('.popup__picture');
-const popupPictureDescr = document.querySelector('.popup__picture-title');
-
-const placeTemplate = document.querySelector('#place-template').content;
-
 const validationClasses = {
-  'formSelector': '.input',
   'inputSelector': '.input__text',
   'submitButtonSelector': '.input__btn',
   'inactiveButtonClass': 'input__btn_state_disabled',
@@ -44,77 +42,35 @@ const validationClasses = {
 /**
  * declare functions
  */
+/*event for trigger revalidate form btn after fill profile form */
+function triggerReValidateEvent(){
+  const e = new Event('revalidateForm');
+  document.dispatchEvent(e);
+}
+
 function fillFormFields(){
   const name = profileNameWrap.innerHTML;
   const profession = professionWrap.innerHTML;
   if(name.length > 0){
     profileNameInput.value = name;
-    hideInputError(profileChangeForm, profileNameInput, validationClasses.inputErrorClass, validationClasses.errorClass);
   }
   if(profession.length > 0){
     professionInput.value = profession;
-    hideInputError(profileChangeForm, professionInput, validationClasses.inputErrorClass, validationClasses.errorClass);
   }
-  profileUpdateBtn.classList.remove(validationClasses.inactiveButtonClass);
-  profileUpdateBtn.removeAttribute('disabled');
+  triggerReValidateEvent();
 }
 
-/*remove place callback*/
-function removePlace(evt){
-  evt.preventDefault();
-  const removeIcon = evt.target;
-  const place = removeIcon.closest('.places__place');
-  place.remove();
+/* trigger close popup custom event form clear form in FormValidator */
+function triggerCloseEvent(){
+  const e = new Event('closePopup');
+  document.dispatchEvent(e);
 }
 
-/*like click callback*/
-function toggleLike(evt){
-  evt.preventDefault();
-  const likeBtn = evt.target;
-  likeBtn.classList.toggle('places__like_state_active');
-}
+
 
 /*open/close popup*/
 function togglePopup(popup){
   popup.classList.toggle('popup_state_opened');
-}
-
-function openPicturePopup(evt){
-  /*we don't need to prevent default event here*/
-  const pictureItem = evt.target;
-  const pictureSrc = pictureItem.getAttribute('src');
-  const pictureTitle = pictureItem.getAttribute('alt');
-  if(pictureSrc.length > 0 && pictureTitle.length > 0){
-    popupPictureElem.setAttribute('src', pictureSrc);
-    popupPictureElem.setAttribute('alt', pictureTitle);
-    popupPictureDescr.textContent = pictureTitle;
-    togglePopup(picturePopup);
-    document.addEventListener('keydown',closePopupByEsc);
-  }
-}
-
-/**
- *  prepare place html function
- *  works on button click or on page init
- *  */
-function preparePlace(titleValue, pictureSrc){
-  const placeElement = placeTemplate.cloneNode(true);
-  const placeCopyTitle = placeElement.querySelector('.places__title');
-  const placeCopyPicture = placeElement.querySelector('.places__picture');
-  const placeCopyRemoveIcon = placeElement.querySelector('.places__remove');
-  const placeLikeIcon = placeElement.querySelector('.places__like');
-
-  /*set place attributs & content */
-  placeCopyTitle.textContent = titleValue;
-  placeCopyPicture.setAttribute('src', pictureSrc);
-  placeCopyPicture.setAttribute('alt', titleValue);
-
-  /*init new place events*/
-  placeCopyRemoveIcon.addEventListener('click', removePlace);
-  placeLikeIcon.addEventListener('click', toggleLike);
-  placeCopyPicture.addEventListener('click',openPicturePopup);
-
-  return placeElement;
 }
 
 /*profile form submit callback*/
@@ -132,8 +88,8 @@ function placeFormSubmitHandler(e){
   e.preventDefault();
   const placeTitleValue = placeTitleInput.value;
   const placeImgValue = placeImgInput.value;
-  const placeElement = preparePlace(placeTitleValue, placeImgValue);
-  placesContainer.prepend(placeElement);
+  const placeCard = new Card({name: placeTitleValue, link: placeImgValue}, '#place-template');
+  placesContainer.prepend(placeCard.generateCard());
   togglePopup(placePopup);
   /* clear form inputs */
   placeTitleInput.value = '';
@@ -143,7 +99,6 @@ function placeFormSubmitHandler(e){
   placeAddBtn.setAttribute('disabled',true);
 }
 
-/*open popup btn click handler with open by popup class from dataset*/
 function openProfilePopupEventHandler(){
   fillFormFields();
   togglePopup(profilePopup);
@@ -158,9 +113,8 @@ function openPlacePopupEventHandler(){
 /*close popup btn click handler */
 function closePopupEventHandler(evt){
   const popup = evt.target.closest('.popup');
-  const formElem = popup.querySelector('.input');
-  clearForm(formElem, validationClasses);
   togglePopup(popup);
+  triggerCloseEvent();
   document.removeEventListener('keydown',closePopupByEsc);
 }
 
@@ -168,8 +122,7 @@ function closePopupByOverlay(evt){
   const targetPopup = evt.target;
   if(evt.target.classList.contains('popup')){
     togglePopup(targetPopup);
-    const formElem = targetPopup.querySelector('.input');
-    clearForm(formElem, validationClasses);
+    triggerCloseEvent();
     document.removeEventListener('keydown',closePopupByEsc);
   }
 }
@@ -179,8 +132,7 @@ function closePopupByEsc(evt){
     const openedPopup = document.querySelector('.popup_state_opened');
     if(openedPopup){
       togglePopup(openedPopup);
-      const formElem = openedPopup.querySelector('.input');
-      clearForm(formElem, validationClasses);
+      triggerCloseEvent();
       document.removeEventListener('keydown',closePopupByEsc);
     }
   }
@@ -189,14 +141,24 @@ function closePopupByEsc(evt){
 /*render places by array of objects*/
 function renderPlaces(cards){
   cards.forEach((item) => {
-    const placeItem = preparePlace(item.name, item.link);
-    placesContainer.append(placeItem);
+    const placeCard = new Card(item, '#place-template');
+    placesContainer.append(placeCard.generateCard());
+  });
+}
+
+function initValidation(formSelector){
+  const formList = Array.from(document.querySelectorAll(formSelector));
+  formList.forEach((formElement) => {
+    let validator = new FormValidator(validationClasses, formElement);;
+    validator.enableValidation();
   });
 }
 
 /*render places*/
 renderPlaces(initialCards);
-enableValidation(validationClasses);
+/* init form validation with FormValidator class */
+initValidation('.input');
+
 
 /**
  * init events
@@ -214,4 +176,12 @@ popupList.forEach( popup => {
 /*form submit handlers*/
 profileChangeForm.addEventListener('submit', profileFormSubmitHandler);
 placeAddForm.addEventListener('submit', placeFormSubmitHandler);
+
+export {
+  popupPictureDescr,
+  popupPictureElem,
+  picturePopup,
+  closePopupByEsc,
+  togglePopup
+};
 
