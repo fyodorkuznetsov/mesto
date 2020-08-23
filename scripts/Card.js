@@ -1,4 +1,4 @@
-import {popupPictureDescr, popupPictureElem, picturePopup, closePopupByEsc, togglePopup}  from './index.js';
+import {fillAndOpenPicturePopup}  from './utils/functions.js';
 
 export default class Card{
 
@@ -44,12 +44,7 @@ export default class Card{
   }
 
   _handlePictureClick(){
-    popupPictureElem.setAttribute('src', this._link);
-    popupPictureElem.setAttribute('alt', this._name);
-    popupPictureDescr.textContent = this._name;
-
-    togglePopup(picturePopup);
-    document.addEventListener('keydown',closePopupByEsc);
+    fillAndOpenPicturePopup(this._link, this._name);
   }
 
   _handleLikeBtnClick(evt){

@@ -1,10 +1,8 @@
+import {popupPictureDescr, popupPictureElem, picturePopup} from './utils/constants.js';
+import {togglePopup, triggerCloseEvent, closePopupByEsc}  from './utils/functions.js';
 import {initialCards} from './cards.js';
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
-
-const popupPictureElem = document.querySelector('.popup__picture');
-const popupPictureDescr = document.querySelector('.popup__picture-title');
-const picturePopup = document.querySelector('.popup_type_picture');
 
 const openProfilePopupBtn = document.querySelector('.profile__edit-button');
 const closePopupBtns = document.querySelectorAll('.popup__close-btn');
@@ -23,7 +21,6 @@ const placeTitleInput = document.querySelector('.input__text_type_place-title');
 const placeImgInput = document.querySelector('.input__text_type_place-img');
 
 const profileChangeForm = document.querySelector('.input_type_profile');
-const profileUpdateBtn = profileChangeForm.querySelector('.input__btn');
 const placeAddForm = document.querySelector('.input_type_place');
 const placeAddBtn = placeAddForm.querySelector('.input__btn');
 
@@ -32,11 +29,11 @@ const placePopup = document.querySelector('.popup_type_place');
 const placesContainer = document.querySelector('.places');
 
 const validationClasses = {
-  'inputSelector': '.input__text',
-  'submitButtonSelector': '.input__btn',
-  'inactiveButtonClass': 'input__btn_state_disabled',
-  'inputErrorClass': 'input__text_type_error',
-  'errorClass': 'input__field-error_state_active'
+  inputSelector: '.input__text',
+  submitButtonSelector: '.input__btn',
+  inactiveButtonClass: 'input__btn_state_disabled',
+  inputErrorClass: 'input__text_type_error',
+  errorClass: 'input__field-error_state_active'
 };
 
 /**
@@ -49,29 +46,15 @@ function triggerReValidateEvent(){
 }
 
 function fillFormFields(){
-  const name = profileNameWrap.innerHTML;
-  const profession = professionWrap.innerHTML;
-  if(name.length > 0){
-    profileNameInput.value = name;
-  }
-  if(profession.length > 0){
-    professionInput.value = profession;
-  }
+  const name = profileNameWrap.textContent;
+  const profession = professionWrap.textContent;
+  profileNameInput.value = name;
+  professionInput.value = profession;
   triggerReValidateEvent();
 }
 
 /* trigger close popup custom event form clear form in FormValidator */
-function triggerCloseEvent(){
-  const e = new Event('closePopup');
-  document.dispatchEvent(e);
-}
 
-
-
-/*open/close popup*/
-function togglePopup(popup){
-  popup.classList.toggle('popup_state_opened');
-}
 
 /*profile form submit callback*/
 function profileFormSubmitHandler(e){
@@ -102,12 +85,10 @@ function placeFormSubmitHandler(e){
 function openProfilePopupEventHandler(){
   fillFormFields();
   togglePopup(profilePopup);
-  document.addEventListener('keydown',closePopupByEsc);
 }
 
 function openPlacePopupEventHandler(){
   togglePopup(placePopup);
-  document.addEventListener('keydown',closePopupByEsc);
 }
 
 /*close popup btn click handler */
@@ -115,7 +96,6 @@ function closePopupEventHandler(evt){
   const popup = evt.target.closest('.popup');
   togglePopup(popup);
   triggerCloseEvent();
-  document.removeEventListener('keydown',closePopupByEsc);
 }
 
 function closePopupByOverlay(evt){
@@ -123,18 +103,6 @@ function closePopupByOverlay(evt){
   if(evt.target.classList.contains('popup')){
     togglePopup(targetPopup);
     triggerCloseEvent();
-    document.removeEventListener('keydown',closePopupByEsc);
-  }
-}
-
-function closePopupByEsc(evt){
-  if(evt.key === 'Escape'){
-    const openedPopup = document.querySelector('.popup_state_opened');
-    if(openedPopup){
-      togglePopup(openedPopup);
-      triggerCloseEvent();
-      document.removeEventListener('keydown',closePopupByEsc);
-    }
   }
 }
 
@@ -159,17 +127,16 @@ renderPlaces(initialCards);
 /* init form validation with FormValidator class */
 initValidation('.input');
 
-
 /**
  * init events
  */
 /*open/close pop-ups*/
 openProfilePopupBtn.addEventListener('click', openProfilePopupEventHandler);
 openPlacePopupBtn.addEventListener('click', openPlacePopupEventHandler);
-closePopupBtns.forEach( btn => {
+closePopupBtns.forEach( (btn) => {
   btn.addEventListener('click', closePopupEventHandler);
 });
-popupList.forEach( popup => {
+popupList.forEach( (popup) => {
   popup.addEventListener('click', closePopupByOverlay);
 });
 
@@ -184,4 +151,3 @@ export {
   closePopupByEsc,
   togglePopup
 };
-

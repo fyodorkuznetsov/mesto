@@ -61,17 +61,17 @@ export default class FormValidator{
       evt.preventDefault();
     });
     this._inputList.forEach((inputElement) => {
-      inputElement.addEventListener('input', function () {
+      inputElement.addEventListener('input', (() => {
         this._checkInputValidity(inputElement);
         this._toggleButtonState();
-      }.bind(this));
+      }).bind(this));
     });
 
     /*listen to close popup custom event for form clear */
     document.addEventListener('closePopup',this._clearForm.bind(this));
-    document.addEventListener('revalidateForm',function(){
+    document.addEventListener('revalidateForm', (() => {
       this._toggleButtonState();
-    }.bind(this));
+    }).bind(this));
   }
 
   enableValidation(){

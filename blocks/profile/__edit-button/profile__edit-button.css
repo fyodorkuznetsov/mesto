@@ -3,7 +3,9 @@
   width: 24px;
   height: 24px;
   background-color: #000;
-  background: url('../../../images/edit-icon.svg') center center no-repeat;
+  background-image: url('../../../images/edit-icon.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
   border: 1px solid #fff;
   transition: opacity 0.3s ease-in-out;
   cursor: pointer;
