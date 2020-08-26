@@ -1,11 +1,10 @@
-import {fillAndOpenPicturePopup}  from './utils/functions.js';
-
 export default class Card{
 
-  constructor(data, cardSelector) {
+  constructor({data, cardSelector, cardClickHandler}) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
+    this._cardClickHandler = cardClickHandler;
   }
 
   _getTemplate() {
@@ -34,17 +33,13 @@ export default class Card{
   _setEventListeners(){
     /*open picture popup*/
     this._element.querySelector('.places__picture').addEventListener('click', () => {
-      this._handlePictureClick();
+      this._cardClickHandler(this._link, this._name);
     });
 
     /* like event */
     this._like.addEventListener('click',this._handleLikeBtnClick.bind(this));
     /* remove event*/
     this._removeBtn.addEventListener('click', this._handleRemoveBtnClick.bind(this));
-  }
-
-  _handlePictureClick(){
-    fillAndOpenPicturePopup(this._link, this._name);
   }
 
   _handleLikeBtnClick(evt){

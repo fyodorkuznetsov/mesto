@@ -38,7 +38,7 @@ export default class FormValidator{
     }
   }
 
-  _toggleButtonState(){
+  toggleButtonState(){
     if(this._hasInvalidInput()){
       this._buttonElement.classList.add(this._settings.inactiveButtonClass);
       this._buttonElement.setAttribute('disabled', true);
@@ -48,12 +48,13 @@ export default class FormValidator{
     }
   }
 
-  _clearForm(){
+  /* Made this method public, to use in other classes */
+  clearForm(){
     this._form.reset();
     this._inputList.forEach((inputElement) => {
         this._hideInputError(inputElement);
     });
-    this._toggleButtonState();
+    this.toggleButtonState();
   }
 
   _setEventListeners(){
@@ -63,15 +64,9 @@ export default class FormValidator{
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', (() => {
         this._checkInputValidity(inputElement);
-        this._toggleButtonState();
+        this.toggleButtonState();
       }).bind(this));
     });
-
-    /*listen to close popup custom event for form clear */
-    document.addEventListener('closePopup',this._clearForm.bind(this));
-    document.addEventListener('revalidateForm', (() => {
-      this._toggleButtonState();
-    }).bind(this));
   }
 
   enableValidation(){
