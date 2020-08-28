@@ -1,32 +1,29 @@
 import '../../pages/index.css';
 
-import {initialCards} from '../utils/constants.js';
-import Card from '../components/Card.js';
+import {initialCards, validationClasses} from '../utils/constants.js';
+import {createCardMarkup} from '../utils/functions.js';
 import Section from '../components/Section.js';
 import FormValidator from '../components/FormValidator.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 
+const profileAddButton = document.querySelector('.profile__add-button');
+const profileEditButton = document.querySelector('.profile__edit-button')
+
+const nameElement = document.querySelector('.input__text_type_name');
+const professionElement = document.querySelector('.input__text_type_profession');
+
 const picturePopup = new PopupWithImage('.popup_type_picture');
 picturePopup.setEventListeners();
 
-const userInfoInstance = new UserInfo({nameSelector: '.profile__name', descrSelector: '.profile__profession'});
+const userInfoInstance = new UserInfo({nameSelector: '.profile__name', professionSelector: '.profile__profession'});
 
 const cardList = new Section(
   {
     items : initialCards,
     renderer : (item) => {
-      const cardElement = new Card(
-        {
-          data: item,
-          cardSelector: '#place-template',
-          cardClickHandler : (link, title) => {
-            picturePopup.open(link, title);
-          }
-        }
-      );
-      cardList.addItem(cardElement.generateCard());
+      cardList.addItem(createCardMarkup({item, picturePopup}));
     }
   },
   '.places'
@@ -41,24 +38,14 @@ const addPlacePopup = new PopupWithForm(
         name: formValues['place-title'],
         link: formValues['place-img']
       };
-      const cardElement = new Card(
-        {
-          data: item,
-          cardSelector: '#place-template',
-          cardClickHandler : (link, title) => {
-            picturePopup.open(link, title);
-          }
-        }
-      );
-      cardList.addItem(cardElement.generateCard(), true);
+      cardList.addItem(createCardMarkup({item, picturePopup}), true);
       addPlacePopup.close();
-    },
-    formValidatorInitializator: (form, classes) => {
-      return new FormValidator(form, classes);
     }
   }
 );
 addPlacePopup.setEventListeners();
+const addPlaceValidator = new FormValidator(validationClasses, addPlacePopup.getFormElement());
+addPlaceValidator.enableValidation();
 
 const editProfilePopup = new PopupWithForm(
   {
@@ -66,23 +53,28 @@ const editProfilePopup = new PopupWithForm(
     handleFormSubmit: (formValues) => {
       const data = {
         name: formValues['name'],
-        descr: formValues['profession']
+        profession: formValues['profession']
       }
       userInfoInstance.setUserInfo(data);
       editProfilePopup.close();
-    },
-    formValidatorInitializator: (form, classes) => {
-      return new FormValidator(form, classes);
-    },
-    beforeOpenAction: () => {
-      const userData = userInfoInstance.getUserInfo();
-      document.querySelector('.input__text_type_name').value = userData.name;
-      document.querySelector('.input__text_type_profession').value = userData.descr;
     }
   }
 );
 editProfilePopup.setEventListeners();
+const editProfileValidator = new FormValidator(validationClasses, editProfilePopup.getFormElement());
+editProfileValidator.enableValidation();
 
 /* init events */
-document.querySelector('.profile__add-button').addEventListener('click', () => {addPlacePopup.open()});
-document.querySelector('.profile__edit-button').addEventListener('click', () => {editProfilePopup.open()});
+profileAddButton.addEventListener('click', () => {
+    addPlaceValidator.clearForm();
+    addPlacePopup.open()
+  }
+);
+profileEditButton.addEventListener('click', () => {
+  editProfilePopup.open();
+  editProfileValidator.clearForm();
+  const userData = userInfoInstance.getUserInfo();
+  nameElement.value = userData.name;
+  professionElement.value = userData.profession;
+  editProfileValidator.toggleButtonState();
+});

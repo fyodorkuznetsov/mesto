@@ -1,8 +1,7 @@
 export default class Card{
 
   constructor({data, cardSelector, cardClickHandler}) {
-    this._name = data.name;
-    this._link = data.link;
+    this._data = data;
     this._cardSelector = cardSelector;
     this._cardClickHandler = cardClickHandler;
   }
@@ -11,6 +10,7 @@ export default class Card{
     const cardElement = document
       .querySelector(this._cardSelector)
       .content
+      .querySelector('.places__place')
       .cloneNode(true);
 
     return cardElement;
@@ -20,20 +20,26 @@ export default class Card{
     this._element = this._getTemplate();
     this._removeBtn = this._element.querySelector('.places__remove');
     this._like = this._element.querySelector('.places__like');
+    this._picture = this._element.querySelector('.places__picture');
 
     this._setEventListeners();
 
-    this._element.querySelector('.places__title').textContent = this._name;
-    this._element.querySelector('.places__picture').setAttribute('src', this._link);
-    this._element.querySelector('.places__picture').setAttribute('alt', this._name);
+    this._element.querySelector('.places__title').textContent = this._data.name;
+    this._picture.setAttribute('src', this._data.link);
+    this._picture.setAttribute('alt', this._data.name);
 
     return this._element;
   }
 
   _setEventListeners(){
     /*open picture popup*/
-    this._element.querySelector('.places__picture').addEventListener('click', () => {
-      this._cardClickHandler(this._link, this._name);
+    this._picture.addEventListener('click', () => {
+      this._cardClickHandler(
+        {
+          link: this._data.link,
+          name: this._data.name
+        }
+      );
     });
 
     /* like event */
@@ -49,6 +55,7 @@ export default class Card{
 
   _handleRemoveBtnClick(evt){
     evt.preventDefault();
-    evt.target.closest('.places__place').remove();
+    this._element.remove();
+    this._element = null;
   }
 }

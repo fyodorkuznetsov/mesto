@@ -1,48 +1,42 @@
 import Popup from './Popup.js';
-import {validationClasses} from '../utils/constants.js';
 
 export default class PopupWithForm extends Popup{
 
-  constructor(params){
-    super(params.popupSelector);
-    this._handleFormSubmit = params.handleFormSubmit.bind(this);
+  constructor({popupSelector, handleFormSubmit}){
+    super(popupSelector);
+    this._handleFormSubmit = handleFormSubmit.bind(this);
     this._form = this._popup.querySelector('.input');
-
-    this._formValidator = params.formValidatorInitializator(validationClasses, this._form);
-    this._formValidator.enableValidation();
-
-    this._beforeOpenAction = params.beforeOpenAction;
+    this._formElements = Array.from(this._form.elements);
   }
 
   setEventListeners(){
     super.setEventListeners();
 
-    this._form.addEventListener('submit', () => {
+    this._form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
     });
   }
 
   _getInputValues(){
-    const formElements = Array.from(this._form.elements);
-    const formValues = {};
-    formElements.forEach( (elem) => {
-      formValues[elem.name] = elem.value;
+    this._formValues = {};
+    this._formElements.forEach( (elem) => {
+      this._formValues[elem.name] = elem.value;
     });
-    return formValues;
+    return this._formValues;
   }
 
   close(){
     super.close();
-
-    this._formValidator.clearForm();
+    this._form.reset();
   }
 
   open(){
-    if(typeof this._beforeOpenAction === 'function'){
-      this._beforeOpenAction();
-    }
     super.open();
-    this._formValidator.toggleButtonState();
+  }
+
+  getFormElement(){
+    return this._form;
   }
 
 }

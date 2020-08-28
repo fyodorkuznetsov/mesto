@@ -48,7 +48,6 @@ export default class FormValidator{
     }
   }
 
-  /* Made this method public, to use in other classes */
   clearForm(){
     this._form.reset();
     this._inputList.forEach((inputElement) => {

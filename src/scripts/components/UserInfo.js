@@ -1,18 +1,18 @@
 export default class UserInfo{
-  constructor({nameSelector, descrSelector}){
+  constructor({nameSelector, professionSelector}){
     this._nameElement = document.querySelector(nameSelector);
-    this._descrElement = document.querySelector(descrSelector);
+    this._professionElement = document.querySelector(professionSelector);
   }
 
   getUserInfo(){
     return {
       name: this._nameElement.textContent,
-      descr: this._descrElement.textContent
+      profession: this._professionElement.textContent
     };
   }
 
-  setUserInfo({name, descr}){
+  setUserInfo({name, profession}){
     this._nameElement.textContent = name;
-    this._descrElement.textContent = descr;
+    this._professionElement.textContent = profession;
   }
 }
