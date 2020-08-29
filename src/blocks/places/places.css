@@ -4,6 +4,8 @@
 @import url(./__picture-wrap/places__picture-wrap.css);
 @import url(./__title/places__title.css);
 @import url(./__like/places__like.css);
+@import url(./__like-counter/places__like-counter.css);
+@import url(./__like-btn/places__like-btn.css);
 @import url(./__remove/places__remove.css);
 
 .places{

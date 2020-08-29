@@ -11,7 +11,10 @@
     </header>
     <main class="content">
       <section class="profile">
-        <img class="profile__avatar" src="./images/avatar.jpg" alt="Аватар профиля">
+        <figure class="profile__avatar-wrap">
+          <img class="profile__avatar" src="./images/avatar.jpg" alt="Аватар профиля">
+          <button class="profile__avatar-btn" aria-label="Редактировать аватар"></button>
+        </figure>
         <div class="profile__info">
           <div class="profile__name-wrap">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -60,6 +63,28 @@
         <button type="button" class="popup__close-btn"></button>
       </div>
     </section>
+    <section class="popup popup_type_confirm">
+      <div class="popup__container">
+        <h3 class="popup__title">Вы уверены?</h3>
+        <form class="input input_type_delete" action="#" name="delete" enctype="multipart/form-data" method="POST" novalidate>
+          <button type="submit" class="input__btn input__btn_type_alone">Да</button>
+        </form>
+        <button type="button" class="popup__close-btn"></button>
+      </div>
+    </section>
+    <section class="popup popup_type_avatar">
+      <div class="popup__container">
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form class="input input_type_avatar" action="#" name="avatar-form" enctype="multipart/form-data" method="POST" novalidate>
+          <label class="input__label">
+            <input id="avatar-input" type="url" class="input__text input__text_type_avatar" placeholder="Ссылка на картинку" name="avatar" required>
+            <span id="avatar-input-error" class="input__field-error"></span>
+          </label>
+          <button type="submit" class="input__btn">Сохранить</button>
+        </form>
+        <button type="button" class="popup__close-btn"></button>
+      </div>
+    </section>
     <section class="popup popup_type_picture">
       <div class="popup__picture-container">
         <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg" class="popup__picture" alt="">
@@ -74,7 +99,10 @@
         </figure>
         <div class="places__title-wrap">
           <h2 class="places__title"></h2>
-          <button type="button" class="places__like"></button>
+          <div class="places__like">
+            <button type="button" class="places__like-btn"></button>
+            <p class="places__like-counter">0</p>
+          </div>
         </div>
         <button type="button" class="places__remove"></button>
       </article>

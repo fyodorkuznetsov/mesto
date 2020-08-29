@@ -7,7 +7,7 @@
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/places/places.css);
 /*по аналогии с модификатором для попапа - подключаем модификатор активного состояния попапа позже подключения основной css*/
-@import url(../blocks/places/__like/_state/places__like_state_active.css);
+@import url(../blocks/places/__like-btn/_state/places__like-btn_state_active.css);
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/popup/popup.css);
 /*т.к. импорты необходимо объявлять в начале файла блока - модификатор не сможет переопределить значение св-ва display.
@@ -16,4 +16,5 @@
 @import url(../blocks/input/input.css);
 @import url(../blocks/input/__field-error/_state/input__field-error_state_active.css);
 @import url(../blocks/input/__btn/_state/input__btn_state_disabled.css);
+@import url(../blocks/input/__btn/_type/input__btn_type_alone.css);
 @import url(../blocks/input/__text/_type/input__text_type_error.css);
