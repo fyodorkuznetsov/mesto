@@ -12,7 +12,7 @@ export default class UserInfo{
     };
   }
 
-  setUserInfo({name, profession, avatar}){
+  setUserInfo({name, profession, avatar, userId}){
     if(typeof name !== 'undefined' && typeof profession !== 'undefined'){
       this._nameElement.textContent = name;
       this._professionElement.textContent = profession;
@@ -20,5 +20,12 @@ export default class UserInfo{
     if(typeof avatar !== 'undefined'){
       this._avatarElement.setAttribute('src', avatar);
     }
+    if(typeof userId !== 'undefined'){
+      this._userId = userId;
+    }
+  }
+
+  getUserId(){
+    return this._userId;
   }
 }

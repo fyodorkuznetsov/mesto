@@ -4,14 +4,6 @@ export default class Api{
     this._baseHeaders = options.headers;
   }
 
-  setUserId(userId) {
-    this._userId = userId;
-  }
-
-  getUserId(){
-    return this._userId;
-  }
-
   getUserInfo() {
     return fetch(
       `${this._baseUrl}/users/me`,

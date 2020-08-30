@@ -17,15 +17,11 @@ export const createCardMarkup = ({item, picturePopup, apiInstance}) => {
               apiInstance.removeCard(item.id)
               .then((res) => {
                 card.removeElement();
+                confirmPopup.close();
               })
               .catch((err) => {
                 console.log(err);
-              })
-              .finally(
-                () => {
-                  confirmPopup.close();
-                }
-              );
+              });
             }
           }
         );

@@ -1,4 +1,4 @@
-import '../../pages/index.css';
+import './index.css';
 
 import {validationClasses} from '../utils/constants.js';
 import {createCardMarkup} from '../utils/functions.js';
@@ -26,10 +26,10 @@ apiInstance.getUserInfo()
                 {
                   name: res.name,
                   profession: res.about,
-                  avatar: res.avatar
+                  avatar: res.avatar,
+                  userId: res._id
                 }
               );
-              apiInstance.setUserId(res._id);
 
               apiInstance.getInitialCards()
               .then((res) => {
@@ -42,8 +42,8 @@ apiInstance.getUserInfo()
                       link: resItem.link,
                       likes: resItem.likes.length,
                       id: resItem._id,
-                      isOwner: resItem.owner._id === apiInstance.getUserId(),
-                      isLiked: Array.from(resItem.likes).some((like) => like._id === apiInstance.getUserId())
+                      isOwner: resItem.owner._id === userInfoInstance.getUserId(),
+                      isLiked: Array.from(resItem.likes).some((like) => like._id === userInfoInstance.getUserId())
                     }
                   );
                 });
@@ -86,8 +86,8 @@ apiInstance.getUserInfo()
                                 link: res.link,
                                 id: res._id,
                                 likes: res.likes.length,
-                                isOwner: res.owner._id === apiInstance.getUserId(),
-                                isLiked: Array.from(res.likes).some((like) => like._id === apiInstance.getUserId())
+                                isOwner: res.owner._id === userInfoInstance.getUserId(),
+                                isLiked: Array.from(res.likes).some((like) => like._id === userInfoInstance.getUserId())
                               },
                               picturePopup,
                               apiInstance
@@ -95,16 +95,12 @@ apiInstance.getUserInfo()
                           ),
                           true
                         );
+                        addPlacePopup.getButtonElement().textContent = 'Сохранить';
+                        addPlacePopup.close();
                       })
                       .catch((err) => {
                         console.log(err);
-                      })
-                      .finally(
-                        () => {
-                          addPlacePopup.getButtonElement().textContent = 'Сохранить';
-                          addPlacePopup.close();
-                        }
-                      );
+                      });
                     }
                   }
                 );
@@ -159,16 +155,12 @@ const editProfilePopup = new PopupWithForm(
           name: res.name,
           profession: res.about
         });
+        editProfilePopup.getButtonElement().textContent = 'Сохранить';
+        editProfilePopup.close();
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(
-        () => {
-          editProfilePopup.getButtonElement().textContent = 'Сохранить';
-          editProfilePopup.close();
-        }
-      );
+      });
     }
   }
 );
@@ -186,16 +178,12 @@ const editAvatarPopup = new PopupWithForm(
         userInfoInstance.setUserInfo({
           avatar: res.avatar
         });
+        editAvatarPopup.close();
+        editAvatarPopup.getButtonElement().textContent = 'Сохранить';
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(
-        () => {
-          editAvatarPopup.close();
-          editAvatarPopup.getButtonElement().textContent = 'Сохранить';
-        }
-      );
+      });
     }
   }
 );
